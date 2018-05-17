@@ -31,11 +31,14 @@ use yii\helpers\Html;
                         <label class="control-label col-md-4"><?=($junction_model->getAttributeLabel($junction_column));?></label>
                         <div class="col-md-6">
                             <?php switch ($columns_meta[$junction_column]->type) {
+                                case 'float' : 
+                                case 'decimal' : 
+                                    echo Html::textInput($junction . '[' . $junction_column. ']', '', ['class' => 'form-control', 'type' => 'number', 'step' => '0.01']);
+                                    break;
+
                                 case 'smallint' : 
                                 case 'bigint' : 
                                 case 'integer' : 
-                                case 'float' : 
-                                case 'decimal' : 
                                     echo Html::textInput($junction . '[' . $junction_column. ']', $columns_meta[$junction_column]->defaultValue, ['id' => "junction_add_field_" . $key, 'class' => 'form-control', 'type' => 'number']);
                                     break;
                                 
@@ -80,7 +83,6 @@ use yii\helpers\Html;
                                 case 'float' : 
                                 case 'decimal' : 
                                     echo Html::textInput($junction . '[' . $junction_column. ']', '', ['class' => 'form-control', 'type' => 'number', 'step' => '0.01', 'data-column-index' => $key]);
-                                    break;
                                     break;
                                 case 'smallint' : 
                                 case 'bigint' : 
