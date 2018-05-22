@@ -6,7 +6,7 @@ use yii\widgets\Pjax;
 ?>
 <div class="row">
     <div class="col-md-12 col-sm-6 col-xs-12 junction">
-        <p><span class="btn btn-success" data-toggle="modal" data-target="#add_new_junction_modal"><?= Yii::t('app', 'Create ' . $attribute_class_name)?></span></p>
+        <p><span class="btn btn-success" data-toggle="modal" data-target="#add_new_junction_modal"><?= Yii::t('app', 'Create ' . $attribute_label)?></span></p>
     <?php Pjax::begin(['id' => 'junction-list', 'enablePushState' => false, 'timeout' => false]); ?>
         <?= GridView::widget([
             'dataProvider' => $dataProvider,

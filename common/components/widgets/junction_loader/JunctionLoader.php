@@ -29,10 +29,28 @@ class JunctionLoader extends Widget
     public $modelOptions = [];
 
     /**
+     * Junction class options
+     * @var array
+     */
+    public $junctionOptions = [
+        'class_name' => ''
+    ];
+
+    /**
      * Name of the attribute, refers to the table linked
      * @var string
      */
     public $attribute;
+
+    /**
+     * Attribute class options
+     * @var array
+     */
+    public $attributeOptions = [
+        'class_name' => '',
+        'label' => '',
+        'ID' => ''
+    ];
 
     /**
      * Whether to show the link only, used in a _form of the model.
@@ -88,12 +106,32 @@ class JunctionLoader extends Widget
                 . Html::a('Update ' . $attribute_titleize, [$model_ID . '/' . 'update-' . $attribute . '?id=' . $model->id], ['class' => 'btn btn-default btn-xs'])
                 . '<br /><br />';
 
-        $attribute_class_name = Inflector::classify(Inflector::singularize($attribute)); // 'Amenity'
-        $attribute_ID = Inflector::camel2id($attribute_class_name); // 'amenity' with '-' separator
-        $junction_ID = $model_ID . '-' . $attribute_ID;
+        $attribute_options = $this->attributeOptions;
+        $junction_options = $this->junctionOptions;
+
+        if (empty($attribute_options['class_name']))
+            $attribute_class_name = Inflector::classify(Inflector::singularize($attribute)); // 'Amenity'
+        else 
+            $attribute_class_name = $attribute_options['class_name'];
+
+        if (empty($attribute_options['label']))
+            $attribute_label = $attribute_class_name;
+        else
+            $attribute_label = $attribute_options['label'];
+        
+        if (empty($attribute_options['ID']))
+            $attribute_ID = Inflector::camel2id($attribute_class_name); // 'amenity' with '-' separator
+        else 
+            $attribute_ID = $attribute_options['ID'];
+
         $model_class_name = Inflector::classify($model_titleize); // 'Item'
         
-        $junction = $model_class_name . $attribute_class_name; // 'ItemAmenity'
+        if (empty($junction_options['class_name']))
+            $junction = $model_class_name . $attribute_class_name; // 'ItemAmenity'
+        else 
+            $junction = $junction_options['class_name'];
+        
+        $junction_ID = Inflector::camel2id($junction);
         $prefix_model_path = "\\common\\models\\";
         $junction_search_classname = $prefix_model_path . "search\\" . $junction . 'Search';
         $attribute_model_full_path = $prefix_model_path . $attribute_class_name;
@@ -122,6 +160,7 @@ class JunctionLoader extends Widget
             'dataProvider'         => $dataProvider,
             'columns'              => $columns,
             'attribute_class_name' => $attribute_class_name,
+            'attribute_label'      => $attribute_label,
             'junction_ID'          => $junction_ID
         ]);
 
@@ -134,17 +173,22 @@ class JunctionLoader extends Widget
                 $columns_meta[$column] = $junction_model->getTableSchema()->columns[$column];
         }
 
+        // preparing the dropdown list 
+        $attribute_dropdownlist_data = empty($attribute_options['dropdownlist_data']) ? $attribute_model::getLabelAsList() : $attribute_options['dropdownlist_data'];
+
         $return .= $this->render('modal', [
-            'model'                => $model,
-            'model_primary_key'    => $model_primary_key,
-            'attribute_model'      => $attribute_model, 
-            'attribute_class_name' => $attribute_class_name,
-            'attribute_ID'         => $attribute_ID,
-            'junction_model'       => $junction_model,
-            'junction_ID'          => $junction_ID,
-            'junction'             => $junction,
-            'columns'              => $columns,
-            'columns_meta'         => $columns_meta
+            'model'                       => $model,
+            'model_primary_key'           => $model_primary_key,
+            'attribute_model'             => $attribute_model, 
+            'attribute_class_name'        => $attribute_class_name,
+            'attribute_label'             => $attribute_label,
+            'attribute_ID'                => $attribute_ID,
+            'attribute_dropdownlist_data' => $attribute_dropdownlist_data,
+            'junction_model'              => $junction_model,
+            'junction_ID'                 => $junction_ID,
+            'junction'                    => $junction,
+            'columns'                     => $columns,
+            'columns_meta'                => $columns_meta
         ]);
 
         return $return;

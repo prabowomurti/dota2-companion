@@ -7,7 +7,7 @@ use yii\helpers\Html;
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title"><span></span>Add New <?=$attribute_class_name?></h4>
+                <h4 class="modal-title"><span></span>Add New <?=$attribute_label?></h4>
             </div>
             <form class="form form-horizontal" id="add_new_junction_form" data-url="/<?=$junction_ID?>/create">
                 <?= Html::hiddenInput($junction . '[' . $model_primary_key . ']', $model->id);?>
@@ -17,9 +17,9 @@ use yii\helpers\Html;
                     <div class="form-group">
                         <label class="control-label col-md-4"><?=$attribute_class_name?></label>
                         <div class="col-md-6">
-                            <?= Html::dropdownList($junction . '['. $attribute_ID . '_id]', '', $attribute_model::getLabelAsList(), [
+                            <?= Html::dropdownList($junction . '['. $attribute_ID . '_id]', '', $attribute_dropdownlist_data, [
                                 'class' => 'form-control',
-                                'prompt' => Yii::t('app', 'Select ' . $attribute_class_name)
+                                'prompt' => Yii::t('app', 'Select ' . $attribute_label)
                             ]) ?>
                         </div>
                     </div>

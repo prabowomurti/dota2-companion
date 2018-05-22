@@ -1,6 +1,5 @@
 $(document).ready(function () {
 
-    console.log(new Date());
     // override timeout value of pjax
     $.pjax.defaults.timeout = false;
 
@@ -36,24 +35,12 @@ $(document).ready(function () {
         else 
             params = $.param(parsed_key);
 
-
         $('#edit_junction_form .modal-body .form-group .form-control').each(function (index) {
             // get the index, and then get the value from tr > td:eq()
             var td_index = $(this).attr('data-column-index');
             $(this).val($(row).children('td:eq(' + td_index + ')').text());
 
-        })
-
-        // for (i = 0; i < cars.length; i++) { 
-        //     text += cars[i] + "<br>";
-        // }
-        
-        // TODO : use loop for each element, set the value
-        // 
-        // 
-        // TODO : can we make it from the model's form (?)
-        // 
-        // 
+        });
     });
 
     var edit_junction_url = $('#edit_junction_form').attr('data-url') + '?';
